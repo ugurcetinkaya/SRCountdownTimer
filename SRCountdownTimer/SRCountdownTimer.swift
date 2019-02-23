@@ -50,6 +50,7 @@ public class SRCountdownTimer: UIView {
     public var beginingValue: Int = 1 {
         didSet {
             beginingValueWasSet = true
+            counterLabel.text = "\(beginingValue)"
         }
     }
 
@@ -142,12 +143,17 @@ public class SRCountdownTimer: UIView {
         context?.strokePath()
     }
 
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        counterLabel.frame = self.bounds
+    }
+    
     // MARK: Public methods
     public func start() {
         guard beginingValueWasSet else {
             return
         }
-        counterLabel.text = "\(beginingValue)"
         start(beginingValue: beginingValue)
     }
     /**
