@@ -46,13 +46,20 @@ public class SRCountdownTimer: UIView {
     
     // use minutes and seconds for presentation
     public var useMinutesAndSecondsRepresentation = false
+    
+    public var beginingValue: Int = 1 {
+        didSet {
+            beginingValueWasSet = true
+        }
+    }
 
     private var timer: Timer?
-    private var beginingValue: Int = 1
     private var totalTime: TimeInterval = 1
     private var elapsedTime: TimeInterval = 0
     private var interval: TimeInterval = 1 // Interval which is set by a user
     private let fireInterval: TimeInterval = 0.01 // ~60 FPS
+    
+    private var beginingValueWasSet = false
 
     private lazy var counterLabel: UILabel = {
         let label = UILabel()
@@ -136,13 +143,20 @@ public class SRCountdownTimer: UIView {
     }
 
     // MARK: Public methods
+    public func start() {
+        guard beginingValueWasSet else {
+            return
+        }
+        counterLabel.text = "\(beginingValue)"
+        start(beginingValue: beginingValue)
+    }
     /**
      * Starts the timer and the animation. If timer was previously runned, it'll invalidate it.
      * - Parameters:
      *   - beginingValue: Value to start countdown from.
      *   - interval: Interval between reducing the counter(1 second by default)
      */
-    public func start(beginingValue: Int, interval: TimeInterval = 1) {
+    private func start(beginingValue: Int, interval: TimeInterval = 1) {
         self.beginingValue = beginingValue
         self.interval = interval
 
